@@ -33,6 +33,7 @@ func Momo_colly(url string) string {
 	})
 
 	momo_c.Visit(url)
+	momo_parser_string = momo_parser_string + "Go to link: 🔗 " + url + "\n"
 
 	return momo_parser_string
 }

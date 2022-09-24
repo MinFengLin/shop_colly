@@ -1,4 +1,4 @@
-爬取momo商品目前價格
+爬取momo商品目前價格 (Telegram bot)
 =============
 ### 1. Usage (Only build for armv7 use)
 
