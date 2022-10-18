@@ -6,19 +6,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"regexp"
 	"os"
+	"strings"
+	"strconv"
 )
 
 type momo_j struct {
 	Momo []struct {
-		Item string
-		Url  string
+		Item         string
+		Url          string
+		Target_price string
 	} `json:"momo"`
 }
 
-func Momo_colly(url string) string {
+func Momo_colly(url string, item string, target_price int) string {
 	momo_c := colly.NewCollector()
-	momo_parser_string := ""
+	momo_parser_string := "Item: " + item + "\n"
+	var parser_price int
 
 	momo_c.OnRequest(func(r *colly.Request) { // iT邦幫忙需要寫這一段 User-Agent才給爬
 		r.Headers.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36")
@@ -30,16 +35,24 @@ func Momo_colly(url string) string {
 	// class use .
 	momo_c.OnHTML(".priceTxtArea", func(price *colly.HTMLElement) {
 		momo_parser_string = momo_parser_string + price.Text + "\n"
+		re := regexp.MustCompile("[0-9]+")
+		parser_price, _ = strconv.Atoi(strings.Join(re.FindAllString(price.Text, -1),""))
 	})
 
 	momo_c.Visit(url)
 	momo_parser_string = momo_parser_string + "Go to link: 🔗 " + url + "\n"
 
+	if parser_price <= target_price {
+		momo_parser_string = "✔ 快去搶購:\n目標價 -> " + strconv.Itoa(target_price) + "\n現價 -> " + strconv.Itoa(parser_price) + "\n" + momo_parser_string
+	} else {
+		momo_parser_string = ""
+	}
+
 	return momo_parser_string
 }
 
 func Momo_parser() string {
-	var momo_string = "================Momo================\n"
+	var momo_string = ""
 	filename := "./url.json"
 	jsonFile, err := os.Open(filename)
 	if err != nil {
@@ -58,9 +71,13 @@ func Momo_parser() string {
 	}
 
 	for ii := range data.Momo {
-		momo_string = momo_string + "Item: " + data.Momo[ii].Item + "\n"
-		momo_string = momo_string + Momo_colly(data.Momo[ii].Url)
+		target_price, _ := strconv.Atoi(data.Momo[ii].Target_price)
+		momo_string = momo_string + Momo_colly(data.Momo[ii].Url, data.Momo[ii].Item, target_price)
 	}
 
-	return momo_string
+	if len(momo_string) > 0 {
+		return momo_string
+	} else {
+		return "😔 追蹤的商品,皆為高於目標價格"
+	}
 }

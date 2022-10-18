@@ -6,13 +6,15 @@ steps:
 - name: golangci-lint
   image: golangci/golangci-lint:v1.31.0-alpine
   commands:
-    - golangci-lint run
+    - golangci-lint run -D errcheck
 
 - name: notify_telegram
   image: appleboy/drone-telegram
   settings:
-    token: [REMOVE]
-    to: [REMOVE]
+    token:
+      from_secret: telegram_token
+    to:
+      from_secret: telegram_chatid
     message: >
       {{#success build.status}}
       ✔ golint check PASS #{{build.number}} of `{{repo.name}}`.
@@ -66,8 +68,10 @@ steps:
 - name: notify_telegram
   image: appleboy/drone-telegram
   settings:
-    token: [REMOVE]
-    to: [REMOVE]
+    token:
+      from_secret: telegram_token
+    to:
+      from_secret: telegram_chatid
     message: >
       {{#success build.status}}
       ✔ armv7 build PASS #{{build.number}} of `{{repo.name}}`.
@@ -96,7 +100,7 @@ steps:
 volumes:
 - name: go_dir
   host:
-    path: [REMOVE]
+    path: /Users/minfenglin/go_dir
 
 depends_on:
 - golint_check

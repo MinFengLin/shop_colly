@@ -2,11 +2,13 @@
     "momo": [
         {
             "Item": "【Kleenex 舒潔】Viva廚房紙巾/控油廚紙/拋棄式抹布(舒潔廚房專用紙巾)",
-            "Url": "https://m.momoshop.com.tw/goods.momo?i_code=10316245&sourcePageType=4"
+            "Url": "https://m.momoshop.com.tw/goods.momo?i_code=10316245&sourcePageType=4",
+            "Target_price": "1"
         },
         {
             "Item": "【朵舒】momoco舒適柔韌抽取式衛生紙(150抽x10包x8袋/箱)",
-            "Url": "https://m.momoshop.com.tw/goods.momo?i_code=8531746&mdiv=searchEngine&oid=1_3&kw=%E8%A1%9B%E7%94%9F%E7%B4%99"
+            "Url": "https://m.momoshop.com.tw/goods.momo?i_code=8531746&mdiv=searchEngine&oid=1_3&kw=%E8%A1%9B%E7%94%9F%E7%B4%99",
+            "Target_price": "1000"
         }
     ]
 }
