@@ -51,8 +51,7 @@ func Momo_colly(url string, item string, target_price int) string {
 	return momo_parser_string
 }
 
-func Momo_parser() string {
-	var momo_string = ""
+func Momo_parser() momo_j {
 	filename := "./url.json"
 	jsonFile, err := os.Open(filename)
 	if err != nil {
@@ -69,6 +68,13 @@ func Momo_parser() string {
 	if err := json.Unmarshal(jsonData, &data); err != nil {
 		fmt.Printf("failed to unmarshal json file, error: %v", err)
 	}
+
+	return data
+}
+
+func Momo_parser_data() string {
+	var momo_string = ""
+	data := Momo_parser()
 
 	for ii := range data.Momo {
 		target_price, _ := strconv.Atoi(data.Momo[ii].Target_price)

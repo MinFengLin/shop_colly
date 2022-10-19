@@ -6,7 +6,7 @@ steps:
 - name: golangci-lint
   image: golangci/golangci-lint:v1.31.0-alpine
   commands:
-    - golangci-lint run -D errcheck
+    - golangci-lint run -v
 
 - name: notify_telegram
   image: appleboy/drone-telegram

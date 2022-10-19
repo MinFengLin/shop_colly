@@ -15,5 +15,6 @@
 $ ./shop_colly_armv7
 ```
 ![alt text](https://github.com/MinFengLin/shop_colly/blob/main/shop_colly_telegram_bot_pic_1.png)
+![alt text](https://github.com/MinFengLin/shop_colly/blob/main/shop_colly_telegram_bot_pic_2.png)
 
 ### Enjoy ~
