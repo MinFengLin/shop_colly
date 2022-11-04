@@ -2,8 +2,8 @@ package bot
 
 import (
 	"log"
-
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	momo_colly "github.com/MinFengLin/shop_colly/shop"
 )
 
 var (
@@ -12,6 +12,7 @@ var (
 
 func sendMsg(msg string, chatID int64) {
 	NewMsg := tgbotapi.NewMessage(chatID, msg)
+	NewMsg.DisableWebPagePreview = true
 	// NewMsg.ParseMode = tgbotapi.ModeHTML   //傳送html格式的訊息
 	_, err := bot_d.Send(NewMsg)
 	if err == nil {
@@ -31,13 +32,17 @@ func replyMsg(msg string, chatID int64) {
 			cmd_text := update.Message.Text
 			chatID := update.Message.Chat.ID
 			replyMsg := tgbotapi.NewMessage(chatID, cmd_text)
+			replyMsg.DisableWebPagePreview = true
 			replyMsg.ReplyToMessageID = update.Message.MessageID
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
 				case "shop":
 					replyMsg.Text = msg
 				case "help":
-					replyMsg.Text = "/shop  <-- to show all shop's items"
+					replyMsg.Text = "/shop  <-- to show all shop's items\n"
+					replyMsg.Text = replyMsg.Text + "/shop_debug  <-- execute immediately shop crawler"
+				case "shop_debug":
+					replyMsg.Text = momo_colly.Momo_parser_data()
 				default:
 					replyMsg.Text = ""
 				}
