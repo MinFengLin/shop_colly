@@ -1,8 +1,6 @@
 package main
 
 import (
-	bot_service "bot"
-	momo_colly "shop"
 	"fmt"
 	"strconv"
 
@@ -15,6 +13,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/robfig/cron/v3"
+	bot_service "github.com/MinFengLin/shop_colly/bot"
+	momo_colly "github.com/MinFengLin/shop_colly/shop"
 )
 
 func tgbot_cmd(chatid *int64, token *string) {
