@@ -1,4 +1,4 @@
-package shop
+package crawler
 
 import (
 	"github.com/gocolly/colly"
@@ -11,14 +11,6 @@ import (
 	"strings"
 	"strconv"
 )
-
-type momo_j struct {
-	Momo []struct {
-		Item         string
-		Url          string
-		Target_price string
-	} `json:"momo"`
-}
 
 func Momo_colly(url string, item string, target_price int) string {
 	momo_c := colly.NewCollector()
@@ -39,7 +31,7 @@ func Momo_colly(url string, item string, target_price int) string {
 		parser_price, _ = strconv.Atoi(strings.Join(re.FindAllString(price.Text, -1),""))
 	})
 
-	momo_c.Visit(url)
+	_ = momo_c.Visit(url)
 	momo_parser_string = momo_parser_string + "Go to link: 🔗 " + url + "\n"
 
 	if parser_price <= target_price {

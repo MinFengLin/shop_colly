@@ -3,12 +3,23 @@ package bot
 import (
 	"log"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	momo_colly "github.com/MinFengLin/shop_colly/shop"
+	momo "github.com/MinFengLin/shop_colly/crawler"
 )
 
 var (
 	bot_r, bot_d *tgbotapi.BotAPI
 )
+
+func Tgbot_cmd(chatid *int64, token *string) {
+	momo_data := momo.Momo_parser()
+	momo_info := "-\n"
+
+	for ii := range momo_data.Momo {
+		momo_info = momo_info + momo_data.Momo[ii].Item+"\n -> 目標價格："+momo_data.Momo[ii].Target_price + "\n 網址-(" +momo_data.Momo[ii].Url + ")" + "\n"
+	}
+	momo_info = momo_info + "-\n"
+	Telegram_reply_run(*chatid, *token, momo_info)
+}
 
 func sendMsg(msg string, chatID int64) {
 	NewMsg := tgbotapi.NewMessage(chatID, msg)
@@ -42,7 +53,7 @@ func replyMsg(msg string, chatID int64) {
 					replyMsg.Text = "/shop  <-- to show all shop's items\n"
 					replyMsg.Text = replyMsg.Text + "/shop_debug  <-- execute immediately shop crawler"
 				case "shop_debug":
-					replyMsg.Text = momo_colly.Momo_parser_data()
+					replyMsg.Text = momo.Momo_parser_data()
 				default:
 					replyMsg.Text = ""
 				}
