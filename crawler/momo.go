@@ -6,10 +6,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"regexp"
 	"os"
-	"strings"
+	"regexp"
 	"strconv"
+	"strings"
 )
 
 func Momo_colly(url string, item string, target_price int) string {
@@ -28,7 +28,7 @@ func Momo_colly(url string, item string, target_price int) string {
 	momo_c.OnHTML(".priceTxtArea", func(price *colly.HTMLElement) {
 		momo_parser_string = momo_parser_string + price.Text + "\n"
 		re := regexp.MustCompile("[0-9]+")
-		parser_price, _ = strconv.Atoi(strings.Join(re.FindAllString(price.Text, -1),""))
+		parser_price, _ = strconv.Atoi(strings.Join(re.FindAllString(price.Text, -1), ""))
 	})
 
 	_ = momo_c.Visit(url)
@@ -62,6 +62,18 @@ func Momo_parser() momo_j {
 	}
 
 	return data
+}
+
+func Momo_list_data() string {
+	data := Momo_parser()
+	var list = "-\n"
+
+	for ii := range data.Momo {
+		list = list + data.Momo[ii].Item + "\n -> 目標價格：" + data.Momo[ii].Target_price + "\n 網址-(" + data.Momo[ii].Url + ")" + "\n"
+	}
+	list = list + "-\n"
+
+	return list
 }
 
 func Momo_parser_data() string {
