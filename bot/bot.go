@@ -2,24 +2,14 @@ package bot
 
 import (
 	"log"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+
 	momo "github.com/MinFengLin/shop_colly/crawler"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 var (
 	bot_r, bot_d *tgbotapi.BotAPI
 )
-
-func Tgbot_cmd(chatid *int64, token *string) {
-	momo_data := momo.Momo_parser()
-	momo_info := "-\n"
-
-	for ii := range momo_data.Momo {
-		momo_info = momo_info + momo_data.Momo[ii].Item+"\n -> 目標價格："+momo_data.Momo[ii].Target_price + "\n 網址-(" +momo_data.Momo[ii].Url + ")" + "\n"
-	}
-	momo_info = momo_info + "-\n"
-	Telegram_reply_run(*chatid, *token, momo_info)
-}
 
 func sendMsg(msg string, chatID int64) {
 	NewMsg := tgbotapi.NewMessage(chatID, msg)
@@ -33,7 +23,7 @@ func sendMsg(msg string, chatID int64) {
 	}
 }
 
-func replyMsg(msg string, chatID int64) {
+func replyMsg(chatID int64) {
 	updateConfig := tgbotapi.NewUpdate(0)
 	updateConfig.Timeout = 60
 	updates, _ := bot_r.GetUpdatesChan(updateConfig)
@@ -48,7 +38,7 @@ func replyMsg(msg string, chatID int64) {
 			if update.Message.IsCommand() {
 				switch update.Message.Command() {
 				case "shop":
-					replyMsg.Text = msg
+					replyMsg.Text = momo.Momo_list_data()
 				case "help":
 					replyMsg.Text = "/shop  <-- to show all shop's items\n"
 					replyMsg.Text = replyMsg.Text + "/shop_debug  <-- execute immediately shop crawler"
@@ -67,7 +57,7 @@ func replyMsg(msg string, chatID int64) {
 	}
 }
 
-func Telegram_reply_run(chatID int64, yourToken string, msg string) {
+func Telegram_reply_run(chatID int64, yourToken string) {
 	var err error
 	bot_r, err = tgbotapi.NewBotAPI(yourToken)
 	if err != nil {
@@ -76,7 +66,7 @@ func Telegram_reply_run(chatID int64, yourToken string, msg string) {
 
 	bot_r.Debug = false
 
-	replyMsg(msg, chatID)
+	replyMsg(chatID)
 }
 
 func Telegram_bot_run(chatID int64, yourToken string, msg string) {
